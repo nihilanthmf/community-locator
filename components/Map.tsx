@@ -45,7 +45,7 @@ export default function MapView() {
               width="1000"
               height="450"
               loading="lazy"
-              className="w-full h-[80vh] rounded-[8px] mt-[-7vh]"
+              className="w-full h-[80vh] rounded-[8px] mt-[-9vh]"
             ></iframe>
           </div>
         </div>
