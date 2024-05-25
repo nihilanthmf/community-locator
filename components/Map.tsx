@@ -22,7 +22,7 @@ export default function MapView() {
         <Button
           className={`${cn(
             buttonVariants({ variant: "default" })
-          )} flex justify-center gap-2 w-[7vw] overflow-hidden`}
+          )} flex justify-center gap-2 overflow-hidden w-[35vw] lg:w-[7vw]`}
         >
           <div>
             <Globe2 />

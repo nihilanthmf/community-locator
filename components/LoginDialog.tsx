@@ -120,7 +120,7 @@ export function LoginDialog() {
       <Button
         className={`${cn(
           buttonVariants({ variant: "default" })
-        )} flex justify-center gap-2`}
+        )} flex justify-center gap-2 w-[35vw] lg:w-[7vw]`}
       >
         <div className="loader border-t-primary border-[2px] border-text rounded-[100px] w-[20px] h-[20px] transition-all"></div>
         Loading
@@ -132,7 +132,7 @@ export function LoginDialog() {
         <Button
           className={`${cn(
             buttonVariants({ variant: "default" })
-          )} flex justify-center gap-2`}
+          )} flex justify-center gap-2 w-[35vw] lg:w-[7vw]`}
         >
           <div>
             <User />
@@ -142,7 +142,10 @@ export function LoginDialog() {
       </DialogTrigger>
       {sessionGlobal !== false ? (
         toEditMap ? (
-          <DialogContent className="sm:max-w-[425px]" style={{ zIndex: 100 }}>
+          <DialogContent
+          className="w-11/12 sm:max-w-md"
+            style={{ zIndex: 100 }}
+          >
             <p>
               You will be given a link to Google Maps, you can put your location
               there. Press "Add Marker" icon in the top left corner. This is a
@@ -175,7 +178,10 @@ export function LoginDialog() {
             )}
           </DialogContent>
         ) : (
-          <DialogContent className="sm:max-w-[425px]" style={{ zIndex: 100 }}>
+          <DialogContent
+          className="w-11/12 sm:max-w-md"
+            style={{ zIndex: 100 }}
+          >
             {toShowError ? (
               <ErrorAlert title="Error" description={error} />
             ) : null}
@@ -223,7 +229,10 @@ export function LoginDialog() {
           </DialogContent>
         )
       ) : (
-        <DialogContent className="sm:max-w-[425px]" style={{ zIndex: 100 }}>
+        <DialogContent
+        className="w-11/12 sm:max-w-md"
+          style={{ zIndex: 100 }}
+        >
           <Auth
             supabaseClient={supabase}
             appearance={{
@@ -254,7 +263,7 @@ export function LoginDialog() {
                 input:
                   "rounded-[8px] py-[8px] px-[12px] w-full mt-[8px] text-[12px]",
                 button:
-                  "bg-black text-white rounded-[8px] p-[8px] mt-[8px] mb-[12px] transition-all hover:bg-primary hover:shadow-[0px_0px_4px_4px_rgba(235,94,40,0.3)]",
+                  "bg-black text-white rounded-[8px]  p-[8px] mt-[8px] mb-[12px] transition-all hover:bg-primary hover:shadow-[0px_0px_4px_4px_rgba(235,94,40,0.3)]",
                 label: "hidden",
                 anchor: "text-center text-[12px] text-gray hover:underline",
                 message:

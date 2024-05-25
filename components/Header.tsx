@@ -28,8 +28,8 @@ const Header = ({
   const combinedVariants = variant || defaultVariants;
   const characters = useMemo(() => word.split(""), [word]);
   return (
-    <div className="overflow-hidden p-2">
-      <div className="flex justify-center space-x-2">
+    <div className="overflow-hidden p-2 hidden lg:block">
+      <div className="flex justify-center space-x-1">
         <AnimatePresence>
           {characters.map((char, i) => (
             <motion.h1
@@ -45,7 +45,7 @@ const Header = ({
               }}
               className={cn(
                 className,
-                "font-display text-center text-[#fff] text-4xl font-bold tracking-[-0.1em] md:text-7xl"
+                "font-display text-center text-[#fff] text-4xl font-bold tracking-[-0.1em] lg:text-7xl"
               )}
             >
               {char}
