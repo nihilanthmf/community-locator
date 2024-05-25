@@ -36,48 +36,42 @@ export function LoginDialog() {
   const [bio, setBio] = useState("");
 
   useEffect(() => {
-    fetch(`https://daniel-community-map.vercel.app/api/fetchsupa`).then(
-      (resp) =>
-        resp.json().then(async (data) => {
-          console.log(data);
-          console.log(resp);
-          const supabaseTemp = createClient(
-            "https://aeilgskwpckhncuxjevt.supabase.co",
-            data.api
-          );
+    fetch(`/api/fetchsupa`).then((resp) =>
+      resp.json().then(async (data) => {
+        const supabaseTemp = createClient(data.url, data.api);
 
-          setSupabase(supabaseTemp);
+        setSupabase(supabaseTemp);
 
-          supabaseTemp.auth.getSession().then(({ data: { session } }) => {
+        supabaseTemp.auth.getSession().then(({ data: { session } }) => {
+          if (session === null) {
+            setSession(false);
+          } else {
+            setSession(session);
+          }
+        });
+
+        const {
+          data: { subscription },
+        } = supabaseTemp.auth.onAuthStateChange(
+          async (_event: any, session: any) => {
             if (session === null) {
               setSession(false);
             } else {
+              if (!sessionGlobal && !loadingCreateUser) {
+                try {
+                  setEmail(session.user.email);
+                } catch (error) {}
+              }
               setSession(session);
             }
-          });
-
-          const {
-            data: { subscription },
-          } = supabaseTemp.auth.onAuthStateChange(
-            async (_event: any, session: any) => {
-              if (session === null) {
-                setSession(false);
-              } else {
-                if (!sessionGlobal && !loadingCreateUser) {
-                  try {
-                    setEmail(session.user.email);
-                  } catch (error) {}
-                }
-                setSession(session);
-              }
-            }
-          );
-        })
+          }
+        );
+      })
     );
   }, []);
 
   async function updateUser() {
-    fetch(`https://daniel-community-map.vercel.app/api/createuser`, {
+    fetch(`/api/createuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -102,7 +96,7 @@ export function LoginDialog() {
   }
 
   useEffect(() => {
-    fetch(`https://daniel-community-map.vercel.app/api/checkuser`, {
+    fetch(`/api/checkuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
