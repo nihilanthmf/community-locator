@@ -7,6 +7,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import "../styles/App.css";
 
 import { cn } from "@/lib/utils";
 import { Auth } from "@supabase/auth-ui-react";
@@ -18,6 +19,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { ErrorAlert } from "./ErrorAlert";
+import Link from "next/link";
 
 export function LoginDialog() {
   const [supabase, setSupabase] = useState<any>();
@@ -25,15 +27,19 @@ export function LoginDialog() {
   const [loadingCreateUser, setLoadingCreateUser] = useState(false);
   const [toEditMap, setToEditMap] = useState(false);
   const [toShowError, setToShowError] = useState(false);
+  const [showLink, setShowLink] = useState(false);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("Please enter your name and bio!");
 
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
 
   useEffect(() => {
-    fetch(`/api`).then((resp) =>
+    fetch(`/api/fetchsupa`).then((resp) =>
       resp.json().then(async (data) => {
         const supabaseTemp = createClient(
-          "https://kmqcallqltyxocpsjgkm.supabase.co",
+          "https://aeilgskwpckhncuxjevt.supabase.co",
           data.api
         );
 
@@ -56,7 +62,7 @@ export function LoginDialog() {
             } else {
               if (!sessionGlobal && !loadingCreateUser) {
                 try {
-                  createUser(session.user.email, supabaseTemp);
+                  setEmail(session.user.email);
                 } catch (error) {}
               }
               setSession(session);
@@ -67,24 +73,66 @@ export function LoginDialog() {
     );
   }, []);
 
-  async function createUser(email: string, supabaseTemp: any) {
-    setLoadingCreateUser(true);
-
-    const data = await supabaseTemp.from("users").select().eq("email", email);
-
-    if (data.data === null || data.data.length === 0) {
-      await supabaseTemp.from("users").insert({ email: email });
-    }
+  async function updateUser() {
+    fetch(`/api/createuser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({ email, name, bio }),
+    }).then((resp) =>
+      resp.json().then(async (data) => {
+        console.log(data);
+        if (data.success) {
+          console.log("Success!");
+          setToEditMap(true);
+          setLoading(false);
+          setToShowError(false);
+        } else {
+          setLoading(false);
+          setError("Something went wrong!");
+          setToShowError(true);
+        }
+      })
+    );
   }
 
-  if (supabase === undefined) return <></>;
+  useEffect(() => {
+    fetch(`/api/checkuser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify({ email }),
+    }).then((resp) =>
+      resp.json().then(async (data) => {
+        if (data.exists) {
+          setToEditMap(true);
+        }
+      })
+    );
+  }, [email]);
+
+  if (supabase === undefined)
+    return (
+      <Button
+        className={`${cn(
+          buttonVariants({ variant: "default" })
+        )} flex justify-center gap-2`}
+      >
+        <div className="loader border-t-primary border-[2px] border-text rounded-[100px] w-[20px] h-[20px] transition-all"></div>
+        Loading
+      </Button>
+    );
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
           className={`${cn(
             buttonVariants({ variant: "default" })
-          )} flex justify-center gap-2 w-[7vw]`}
+          )} flex justify-center gap-2`}
         >
           <div>
             <User />
@@ -95,21 +143,41 @@ export function LoginDialog() {
       {sessionGlobal !== false ? (
         toEditMap ? (
           <DialogContent className="sm:max-w-[425px]" style={{ zIndex: 100 }}>
-            <Button
-              className={`${cn(
-                buttonVariants({ variant: "classic" })
-              )} flex justify-center gap-2 w-[7vw]`}
-            >
-              Continue
-            </Button>
+            <p>
+              You will be given a link to Google Maps, you can put your location
+              there. Press "Add Marker" icon in the top left corner. This is a
+              public map, please, be respectful to others, don't delete other's
+              markers and don't put unnessasary markers yourself.<br></br>
+              <br></br>
+              When creating a marker, don't forget to put:<br></br>- your name
+              <br></br>- a bit about yourself<br></br>- a link to contact you
+              <br></br>
+            </p>
+            {showLink ? (
+              <Link
+                href="https://www.google.com/maps/d/u/0/edit?mid=18Sr5PAP_rpt1cPzoemcOcWcdiQSC898&usp=sharing"
+                target="_blank"
+                className="text-primary hover:underline"
+              >
+                Here is the link
+              </Link>
+            ) : (
+              <Button
+                className={`${cn(
+                  buttonVariants({ variant: "classic" })
+                )} flex justify-center gap-2`}
+                onClick={() => {
+                  setShowLink(true);
+                }}
+              >
+                I have read the stuff above
+              </Button>
+            )}
           </DialogContent>
         ) : (
           <DialogContent className="sm:max-w-[425px]" style={{ zIndex: 100 }}>
             {toShowError ? (
-              <ErrorAlert
-                title="Error"
-                description="Please enter your name and bio!"
-              />
+              <ErrorAlert title="Error" description={error} />
             ) : null}
 
             <div>
@@ -135,16 +203,21 @@ export function LoginDialog() {
             <Button
               className={`${cn(
                 buttonVariants({ variant: "classic" })
-              )} flex justify-center gap-2 w-[7vw]`}
+              )} flex justify-center gap-2`}
               onClick={() => {
                 if (name !== "" && bio !== "") {
-                  setToEditMap(true);
                   setToShowError(false);
+
+                  setLoading(true);
+                  updateUser();
                 } else {
                   setToShowError(true);
                 }
               }}
             >
+              {loading ? (
+                <div className="loader border-t-primary border-[2px] border-text rounded-[100px] w-[20px] h-[20px] transition-all"></div>
+              ) : null}
               Continue
             </Button>
           </DialogContent>
@@ -181,12 +254,11 @@ export function LoginDialog() {
                 input:
                   "rounded-[8px] py-[8px] px-[12px] w-full mt-[8px] text-[12px]",
                 button:
-                  "bg-black text-white rounded-[8px] p-[8px] mt-[8px] mb-[12px] transition-all hover:scale-[90%] hover:bg-primary hover:shadow-[0px_0px_4px_4px_rgba(235,94,40,0.3)]",
+                  "bg-black text-white rounded-[8px] p-[8px] mt-[8px] mb-[12px] transition-all hover:bg-primary hover:shadow-[0px_0px_4px_4px_rgba(235,94,40,0.3)]",
                 label: "hidden",
-                anchor:
-                  "text-center text-[12px] text-[#646464] hover:underline",
+                anchor: "text-center text-[12px] text-gray hover:underline",
                 message:
-                  " px-[50px] rounded-[8px] text-center text-[12px] text-[#681200]",
+                  "text-center text-[12px] text-primary flex items-center justify-center",
               },
             }}
             // localization={{
