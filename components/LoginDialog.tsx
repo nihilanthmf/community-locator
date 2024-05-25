@@ -148,11 +148,11 @@ export function LoginDialog() {
           >
             <p>
               You will be given a link to Google Maps, you can put your location
-              there. Press "Add Marker" icon in the top left corner. This is a
-              public map, please, be respectful to others, don't delete other's
-              markers and don't put unnessasary markers yourself.<br></br>
+              there. Press &quot;Add Marker&quot; icon in the top left corner. This is a
+              public map, please, be respectful to others, don&apos;t delete other&apos;s
+              markers and don&apos;t put unnessasary markers yourself.<br></br>
               <br></br>
-              When creating a marker, don't forget to put:<br></br>- your name
+              When creating a marker, don&apos;t forget to put:<br></br>- your name
               <br></br>- a bit about yourself<br></br>- a link to contact you
               <br></br>
             </p>

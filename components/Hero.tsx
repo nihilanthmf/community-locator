@@ -16,7 +16,7 @@ export default function Hero() {
       <ShimmerText />
       <Header word="Daniel's Community Map" />
       <h3 className="block lg:hidden font-display text-center text-[#fff] text-4xl lg font-bold ">
-        Daniel's Community Map
+        Daniel&apos;s Community Map
       </h3>
       <p className="text-gray text-16 text-center">
         See every person on the map to make meeting irl easier
