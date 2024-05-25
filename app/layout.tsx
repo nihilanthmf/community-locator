@@ -15,12 +15,38 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className=" overflow-hidden w-screen h-screen">
+    <html
+      lang="en"
+      style={{
+        overflow: "hidden",
+        height: "100%",
+        width: "100%",
+        margin: 0,
+        overscrollBehavior: "none",
+        position: "relative",
+      }}
+    >
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={`${inter.className}  overflow-hidden bg-background`}>
-        {children}
+      <body
+        className={`${inter.className}  overflow-hidden bg-background`}
+        style={{
+          overflow: "hidden",
+          overscrollBehavior: "none",
+          position: "relative",
+        }}
+      >
+        <div
+          className="overflow-hidden"
+          style={{
+            overflow: "hidden w-screen h-screen",
+            overscrollBehavior: "none",
+            position: "relative",
+          }}
+        >
+          {children}
+        </div>
       </body>
     </html>
   );
