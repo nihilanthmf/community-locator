@@ -39,7 +39,8 @@ export function LoginDialog() {
     fetch(`https://daniel-community-map.vercel.app/api/fetchsupa`).then(
       (resp) =>
         resp.json().then(async (data) => {
-          console.log(data.api);
+          console.log(data);
+          console.log(resp);
           const supabaseTemp = createClient(
             "https://aeilgskwpckhncuxjevt.supabase.co",
             data.api
@@ -124,7 +125,7 @@ export function LoginDialog() {
           buttonVariants({ variant: "default" })
         )} flex justify-center gap-2 w-[35vw] lg:w-[7vw]`}
       >
-        <div className="loader border-t-primary border-[2px] border-text rounded-[100px] w-[20px] h-[20px] transition-all"></div>
+        <div className="loader aspect-[1/1] border-t-primary border-[2px] border-text rounded-[100px] w-[20px] h-[20px] transition-all"></div>
         Loading
       </Button>
     );
