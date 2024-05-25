@@ -36,45 +36,47 @@ export function LoginDialog() {
   const [bio, setBio] = useState("");
 
   useEffect(() => {
-    fetch(`/api/fetchsupa`).then((resp) =>
-      resp.json().then(async (data) => {
-        const supabaseTemp = createClient(
-          "https://aeilgskwpckhncuxjevt.supabase.co",
-          data.api
-        );
+    fetch(`https://daniel-community-map.vercel.app/api/fetchsupa`).then(
+      (resp) =>
+        resp.json().then(async (data) => {
+          console.log(data.api);
+          const supabaseTemp = createClient(
+            "https://aeilgskwpckhncuxjevt.supabase.co",
+            data.api
+          );
 
-        setSupabase(supabaseTemp);
+          setSupabase(supabaseTemp);
 
-        supabaseTemp.auth.getSession().then(({ data: { session } }) => {
-          if (session === null) {
-            setSession(false);
-          } else {
-            setSession(session);
-          }
-        });
-
-        const {
-          data: { subscription },
-        } = supabaseTemp.auth.onAuthStateChange(
-          async (_event: any, session: any) => {
+          supabaseTemp.auth.getSession().then(({ data: { session } }) => {
             if (session === null) {
               setSession(false);
             } else {
-              if (!sessionGlobal && !loadingCreateUser) {
-                try {
-                  setEmail(session.user.email);
-                } catch (error) {}
-              }
               setSession(session);
             }
-          }
-        );
-      })
+          });
+
+          const {
+            data: { subscription },
+          } = supabaseTemp.auth.onAuthStateChange(
+            async (_event: any, session: any) => {
+              if (session === null) {
+                setSession(false);
+              } else {
+                if (!sessionGlobal && !loadingCreateUser) {
+                  try {
+                    setEmail(session.user.email);
+                  } catch (error) {}
+                }
+                setSession(session);
+              }
+            }
+          );
+        })
     );
   }, []);
 
   async function updateUser() {
-    fetch(`/api/createuser`, {
+    fetch(`https://daniel-community-map.vercel.app/api/createuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -99,7 +101,7 @@ export function LoginDialog() {
   }
 
   useEffect(() => {
-    fetch(`/api/checkuser`, {
+    fetch(`https://daniel-community-map.vercel.app/api/checkuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -143,16 +145,18 @@ export function LoginDialog() {
       {sessionGlobal !== false ? (
         toEditMap ? (
           <DialogContent
-          className="w-11/12 sm:max-w-md"
+            className="w-11/12 sm:max-w-md"
             style={{ zIndex: 100 }}
           >
             <p>
               You will be given a link to Google Maps, you can put your location
-              there. Press &quot;Add Marker&quot; icon in the top left corner. This is a
-              public map, please, be respectful to others, don&apos;t delete other&apos;s
-              markers and don&apos;t put unnessasary markers yourself.<br></br>
+              there. Press &quot;Add Marker&quot; icon in the top left corner.
+              This is a public map, please, be respectful to others, don&apos;t
+              delete other&apos;s markers and don&apos;t put unnessasary markers
+              yourself.<br></br>
               <br></br>
-              When creating a marker, don&apos;t forget to put:<br></br>- your name
+              When creating a marker, don&apos;t forget to put:<br></br>- your
+              name
               <br></br>- a bit about yourself<br></br>- a link to contact you
               <br></br>
             </p>
@@ -179,7 +183,7 @@ export function LoginDialog() {
           </DialogContent>
         ) : (
           <DialogContent
-          className="w-11/12 sm:max-w-md"
+            className="w-11/12 sm:max-w-md"
             style={{ zIndex: 100 }}
           >
             {toShowError ? (
@@ -229,10 +233,7 @@ export function LoginDialog() {
           </DialogContent>
         )
       ) : (
-        <DialogContent
-        className="w-11/12 sm:max-w-md"
-          style={{ zIndex: 100 }}
-        >
+        <DialogContent className="w-11/12 sm:max-w-md" style={{ zIndex: 100 }}>
           <Auth
             supabaseClient={supabase}
             appearance={{
