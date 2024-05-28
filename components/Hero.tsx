@@ -6,6 +6,7 @@ import Globe from "./magicui/globe";
 import { ShimmerText } from "./ShimmerText";
 import { LoginDialog } from "./LoginDialog";
 import MapView from "./Map";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -28,6 +29,18 @@ export default function Hero() {
       >
         <LoginDialog />
         <MapView />
+      </div>
+      <div className="flex flex-col items-center absolute bottom-0 right-0 m-2">
+        <p className="text-text text-[10px]">
+          by{" "}
+          <Link
+            className="text-primary underline"
+            href="https://artemymedvedev.com"
+            target="_blank"
+          >
+            Artemy Medvedev
+          </Link>
+        </p>
       </div>
     </div>
   );
