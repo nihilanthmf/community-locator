@@ -138,95 +138,40 @@ export function LoginDialog() {
         </Button>
       </DialogTrigger>
       {sessionGlobal !== false ? (
-        toEditMap ? (
-          <DialogContent
-            className="w-11/12 sm:max-w-md"
-            style={{ zIndex: 100 }}
-          >
-            <p>
-              You will be given a link to Google Maps, you can put your location
-              there. Press &quot;Add Marker&quot; icon in the top left corner.
-              This is a public map, please, be respectful to others, don&apos;t
-              delete other&apos;s markers and don&apos;t put unnessasary markers
-              yourself.<br></br>
-              <br></br>
-              When creating a marker, don&apos;t forget to put:<br></br>- your
-              name
-              <br></br>- a bit about yourself<br></br>- a link to contact you
-              <br></br>
-            </p>
-            {showLink ? (
-              <Link
-                href="https://www.google.com/maps/d/u/0/edit?mid=18Sr5PAP_rpt1cPzoemcOcWcdiQSC898&usp=sharing"
-                target="_blank"
-                className="text-primary hover:underline"
-              >
-                Here is the link
-              </Link>
-            ) : (
-              <Button
-                className={`${cn(
-                  buttonVariants({ variant: "classic" })
-                )} flex justify-center gap-2`}
-                onClick={() => {
-                  setShowLink(true);
-                }}
-              >
-                I have read the stuff above
-              </Button>
-            )}
-          </DialogContent>
-        ) : (
-          <DialogContent
-            className="w-11/12 sm:max-w-md"
-            style={{ zIndex: 100 }}
-          >
-            {toShowError ? (
-              <ErrorAlert title="Error" description={error} />
-            ) : null}
-
-            <div>
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
-                className="col-span-3"
-              />
-            </div>
-            <div>
-              <Label htmlFor="name" className="text-right">
-                Bio
-              </Label>
-              <Textarea
-                onChange={(e) => setBio(e.target.value)}
-                placeholder="Describe yourself, say what you do, what you like, etc."
-              />
-            </div>
+        <DialogContent className="w-11/12 sm:max-w-md" style={{ zIndex: 100 }}>
+          <p>
+            You will be given a link to Google Maps, you can put your location
+            there. Press &quot;Add Marker&quot; icon in the top left corner.
+            This is a public map, please, be respectful to others, don&apos;t
+            delete other&apos;s markers and don&apos;t put unnessasary markers
+            yourself.<br></br>
+            <br></br>
+            When creating a marker, don&apos;t forget to put:<br></br>- your
+            name
+            <br></br>- a bit about yourself<br></br>- a link to contact you
+            <br></br>
+          </p>
+          {showLink ? (
+            <Link
+              href="https://www.google.com/maps/d/u/0/edit?mid=18Sr5PAP_rpt1cPzoemcOcWcdiQSC898&usp=sharing"
+              target="_blank"
+              className="text-primary hover:underline"
+            >
+              Here is the link
+            </Link>
+          ) : (
             <Button
               className={`${cn(
                 buttonVariants({ variant: "classic" })
               )} flex justify-center gap-2`}
               onClick={() => {
-                if (name !== "" && bio !== "") {
-                  setToShowError(false);
-
-                  setLoading(true);
-                  updateUser();
-                } else {
-                  setToShowError(true);
-                }
+                setShowLink(true);
               }}
             >
-              {loading ? (
-                <div className="loader border-t-primary border-[2px] border-text rounded-[100px] w-[20px] h-[20px] transition-all"></div>
-              ) : null}
-              Continue
+              I have read the stuff above
             </Button>
-          </DialogContent>
-        )
+          )}
+        </DialogContent>
       ) : (
         <DialogContent className="w-11/12 sm:max-w-md" style={{ zIndex: 100 }}>
           <Auth
