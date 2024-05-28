@@ -15,10 +15,6 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { createClient } from "@supabase/supabase-js";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { ErrorAlert } from "./ErrorAlert";
 import Link from "next/link";
 
 export function LoginDialog() {
@@ -26,14 +22,9 @@ export function LoginDialog() {
   const [sessionGlobal, setSession] = useState<any>(null);
   const [loadingCreateUser, setLoadingCreateUser] = useState(false);
   const [toEditMap, setToEditMap] = useState(false);
-  const [toShowError, setToShowError] = useState(false);
+
   const [showLink, setShowLink] = useState(false);
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("Please enter your name and bio!");
-
-  const [name, setName] = useState("");
-  const [bio, setBio] = useState("");
 
   useEffect(() => {
     fetch(`/api/fetchsupa`).then((resp) =>
@@ -69,31 +60,6 @@ export function LoginDialog() {
       })
     );
   }, []);
-
-  async function updateUser() {
-    fetch(`/api/createuser`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify({ email, name, bio }),
-    }).then((resp) =>
-      resp.json().then(async (data) => {
-        console.log(data);
-        if (data.success) {
-          console.log("Success!");
-          setToEditMap(true);
-          setLoading(false);
-          setToShowError(false);
-        } else {
-          setLoading(false);
-          setError("Something went wrong!");
-          setToShowError(true);
-        }
-      })
-    );
-  }
 
   useEffect(() => {
     fetch(`/api/checkuser`, {
